@@ -42,24 +42,30 @@ At the end of the project the web application created for Project 3: Item Catalo
     - Created .ssh/authorized_keys file to enable Key-based authentication
     - Copied /root/.ssh/authorized key file contents so RSA key will work for 'grader' user
     
-    - File 'grader' created in /etc/sudoers.d for sudo access  
-    - Entered 'grader ALL=(ALL) NOPASSWD:ALL' in file to enable sudo access
+    - File 'grader' created in /etc/sudoers.d for sudo access
+    - Entered 'Defaults timestamp_timeout=5' to prompt for user password every 5 mins    
+    - Entered 'grader ALL=(ALL) PASSWD:ALL' in file to enable sudo access with password requirement
 
-  2. Update all currently installed packages
+  2. Enforce stronger passwords
+  
+    - In file /etc/pam.d/common-password I updated password parameters to be more stringent
+    - pam_cracklib.so line reads 'retry=3 minlen=8 difok=3 ucredit=1 dcredit=1 ocredit=1 minclass=2'
+    
+  3. Update all currently installed packages
 
     - From user 'grader' ran command 'sudo apt-get update' to identify packages available for upgrade
     - Next ran command 'sudo apt-get-upgrade' to install newest versions of all packages
 
-  3.  Disable remote login for root user
+  4.  Disable remote login for root user
 
     - In /etc/ssh/sshd_config changed 'PermitRootLogin without-password' to 'PermitRootLogin no'
     - Restart sshd  
 
-  4. Change SSH port from 22 to 2200
+  5. Change SSH port from 22 to 2200
   
     - In /etc/ssh/sshd_config changed 'Port 22' to Port '2200'
 
-  5.  Setup Uncomplicated Firewall (UFW) incoming for SSH, HTTP and NTP
+  6.  Setup Uncomplicated Firewall (UFW) incoming for SSH, HTTP and NTP
     
     Following commands were executed:
     
@@ -70,7 +76,7 @@ At the end of the project the web application created for Project 3: Item Catalo
       - sudo ufw allow ntp
       - sudo ufw enable
 
-  6.  Install and configure PostgreSQL
+  7.  Install and configure PostgreSQL
   
     - Remote connections are not allowed by default
     - Created new user 'catalog' with 'createuser' command and provided limited access
@@ -80,7 +86,7 @@ At the end of the project the web application created for Project 3: Item Catalo
         Shall the new role be allowed to create databases? (y/n) n
         Shall the new role be allowed to create more new roles? (y/n) n
 
-  7. Setting up Catalog App Project
+  8. Setting up Catalog App Project
     
     Commands to enable Flask applications
     - cd /var/www
@@ -104,7 +110,7 @@ At the end of the project the web application created for Project 3: Item Catalo
     Create WSGI File to serve the application
         - create /var/www/catalog/catalog.wsgi
         
-  8. Setup Automatic Package Updates
+  9. Setup Automatic Package Updates
 
     - ran 'sudo apt-get update'
     - ran 'sudo apt-get install unattended-upgrades' (package was already installed)
@@ -121,4 +127,6 @@ At the end of the project the web application created for Project 3: Item Catalo
   - Install PostgreSQL and confirm no remote connections [here](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)
   - Setup Flask and serve Catalog App [here](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)
   - Automatic Package Updates [here](https://help.ubuntu.com/lts/serverguide/automatic-updates.html)
+  - Set sudo Password Timeout [here](http://www.howtogeek.com/116757/8-ways-to-tweak-and-configure-sudo-on-ubuntu/)
+
 
